@@ -1,6 +1,8 @@
 import React from "react";
-
+import { ThemeContext } from "../App";
+import { useContext } from "react";
 function About() {
+  const theme = useContext(ThemeContext);
   return (
     <div>
       <div className="w-3/4 mx-auto">
@@ -8,7 +10,11 @@ function About() {
           <h1 className="text-4xl font-bold leading-none tracking-tight sm:text-6xl">
             We love
           </h1>
-          <button className=" btn btn-primary w-[172px] h-[72px] bg-primary shadow stat-title text-primary-content text-4xl font-bold tracking-widest">
+          <button
+            className={` btn ${
+              theme.theme == "light" ? "btn-primary" : "bg-[#FF7AC6]"
+            }  w-[172px] h-[72px] bg-primary shadow stat-title text-primary-content text-4xl font-bold tracking-widest`}
+          >
             comfy
           </button>
         </div>
