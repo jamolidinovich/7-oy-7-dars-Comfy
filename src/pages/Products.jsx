@@ -1,4 +1,4 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { ThemeContext } from "../App";
 import { AiFillAppstore } from "react-icons/ai";
 import { FaBars } from "react-icons/fa6";
@@ -8,6 +8,10 @@ function Products() {
   const theme = useContext(ThemeContext);
   const [featured, setFeatured] = useState([]);
 
+  const searchRef = useRef(null);
+  const catrgoryRef = useRef(null);
+  const companyRef = useRef(null);
+  const sortRef = useRef(null);
   useEffect(() => {
     fetch("https://strapi-store-server.onrender.com/api/products")
       .then((res) => res.json())
@@ -30,45 +34,86 @@ function Products() {
     setButton2Active(!button2Active);
     setButton1Active(false); // Button2 bosilganda Button1ni bekor qilamiz
   };
+  const validate = () => {
+    return true;
+  };
+
+  function handleFl() {
+    const isValid = validate();
+    let name = searchRef.current.value;
+    let cotegory = catrgoryRef.current.value;
+    let company = companyRef.current.value;
+    let sort = sortRef.current.value;
+    if (isValid) {
+      fetch(
+        `https://strapi-store-server.onrender.com/api/products?search=${name}&category=${cotegory}&company=${company}&order=${sort}=100000`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setFeatured(data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
+  }
+
   return (
-    <div className="w-3/4 mx-auto">
+    <div className="w-3/4 container mx-auto">
       <div className="filter p-4 bg-primary-content mt-20 rounded-lg">
         <div className="filter-top flex justify-between gap-3 ">
           <div className="field flex flex-col gap-1 w-1/4">
             <label htmlFor="search cursor-pointer">Search Products</label>
             <input
+              ref={searchRef}
               type="search"
               className="input input-bordered w-full input-sm"
             />
           </div>
           <div className="field flex flex-col gap-1 w-1/4 ">
             <label htmlFor="search cursor-pointer">Select Category</label>
-            <select className="select select-bordered w-full select-sm">
+            <select
+              ref={catrgoryRef}
+              className="select select-bordered w-full select-sm"
+            >
               <option disabled selected>
-                Who shot first?
+                all
               </option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
+              <option>Tables</option>
+              <option>Chairs</option>
+              <option>Kids</option>
+              <option>Sofas</option>
+              <option>Beds</option>
             </select>
           </div>
           <div className="field flex flex-col gap-1 w-1/4 ">
             <label htmlFor="search cursor-pointer">Select Company</label>
-            <select className="select select-bordered w-full select-sm">
+            <select
+              ref={companyRef}
+              className="select select-bordered w-full select-sm"
+            >
               <option disabled selected>
-                Who shot first?
+                all
               </option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
+              <option>Modenza</option>
+              <option>Luxoro</option>
+              <option>Artifex</option>
+              <option>Comfora</option>
+              <option>Homestead</option>
             </select>
           </div>
           <div className="field flex flex-col gap-1 w-1/4 ">
             <label htmlFor="search cursor-pointer">Sort By</label>
-            <select className="select select-bordered w-full select-sm">
+            <select
+              ref={sortRef}
+              className="select select-bordered w-full select-sm"
+            >
               <option disabled selected>
-                Who shot first?
+                a-z
               </option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
+              <option>z-a</option>
+              <option>high</option>
+              <option>low</option>
             </select>
           </div>
         </div>
@@ -98,7 +143,10 @@ function Products() {
             </div>
 
             <div className="search absolute  mr-[200px]  ">
-              <button className="btn mt-[-35px] w-[244px] btn-sm  absolute ml-[580px] btn-primary">
+              <button
+                onClick={handleFl}
+                className="btn mt-[-35px] w-[244px] btn-sm  absolute ml-[580px] btn-primary"
+              >
                 SEARCH
               </button>
             </div>

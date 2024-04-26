@@ -12,7 +12,7 @@ function About() {
           </h1>
           <button
             className={` btn ${
-              theme.theme == "light" ? "btn-primary" : "bg-[#FF7AC6]"
+              theme.theme == "light" ? "btn-primary" : "bg-secondary"
             }  w-[172px] h-[72px] bg-primary shadow stat-title text-primary-content text-4xl font-bold tracking-widest`}
           >
             comfy
